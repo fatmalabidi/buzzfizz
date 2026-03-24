@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  title: Fizzbuzz api
+  description: API de generate a configurable fizzbuzz application with stats
+  version: 1.0.0
+tags:
+  - name: main
+    description: Main endpoints
+  - name: stats
+    description: Stats endpoints
+paths:
+  /sequences/fizzbuzz:
+    get:
+      tags:
+        - main
+      parameters:
+        - name: int1
+          description: first divisor
+          in: query
+          required: true
+          minimum: 1
+          schema:
+            type: integer
+        - name: str1
+          description: String that will replace all numbers divisible by int1.
+          in: query
+          required: true
+          minlength: 1
+          schema:
+            type: string
+        - name: int2
+          description: second divisor
+          in: query
+          required: true
+          minimum: 1
+          schema:
+            type: integer
+        - name: str2
+          description: String that will replace all numbers divisible by int2.
+          in: query
+          required: true
+          minlength: 1
+          schema:
+            type: string
+        - name: limit
+          description: Array size.
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'      
+  /stats:
+    get:
+      tags:
+        - stats
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  int1:
+                    type: integer
+                  str1:
+                    type: string
+                  int2:
+                    type: integer
+                  str2:
+                    type: string
+                  limit:
+                    type: string
+                  hits:
+                    type: integer
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      required:
+        - code
+        - message
