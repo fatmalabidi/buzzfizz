@@ -6,6 +6,7 @@ A small configurable FizzBuzz HTTP API documented by an OpenAPI 3.0 spec.
 - Go 1.24
 - Docker (optional)
 - `oapi-codegen`  
+- `golangci-lint`
 
 to install oapi-codegen:
 
@@ -16,6 +17,11 @@ export PATH=$PATH:$(go env GOPATH)/bin
 
 oapi-codegen --version 
 
+```
+
+Install golangci-lint:
+```bash
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 ```
   
 **Code Generation**
@@ -37,6 +43,11 @@ Test with race
 make test-race
 ```
 
+**Lint**
+```bash
+make lint
+```
+
 **Docker**
 ```bash
 make docker-run
@@ -46,5 +57,4 @@ make docker-run
 ```bash
 make clean
 ```
-
 

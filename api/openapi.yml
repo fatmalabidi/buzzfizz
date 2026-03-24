@@ -1,103 +1,198 @@
-openapi: 3.0.0
+openapi: 3.0.3
+
 info:
-  title: Fizzbuzz api
-  description: API de generate a configurable fizzbuzz application with stats
+  title: FizzBuzz API
   version: 1.0.0
+  description: >
+    Production-ready REST API to generate a configurable FizzBuzz sequence
+    and expose usage statistics for the most frequent request.
 tags:
-  - name: main
-    description: Main endpoints
+  - name: fizzbuzz
+    description: FizzBuzz sequence generation
   - name: stats
-    description: Stats endpoints
+    description: Statistics endpoints
+
 paths:
   /sequences/fizzbuzz:
     get:
       tags:
-        - main
+        - fizzbuzz
+      summary: Generate a configurable FizzBuzz sequence
+      description: >
+        Returns a sequence from 1 to limit where multiples of int1 are replaced
+        by str1, multiples of int2 by str2, and multiples of int1*int2 by the
+        concatenation of str1 and str2.
+      operationId: generateFizzBuzz
       parameters:
         - name: int1
-          description: first divisor
           in: query
           required: true
-          minimum: 1
-          schema:
-            type: integer
-        - name: str1
-          description: String that will replace all numbers divisible by int1.
-          in: query
-          required: true
-          minlength: 1
-          schema:
-            type: string
-        - name: int2
-          description: second divisor
-          in: query
-          required: true
-          minimum: 1
-          schema:
-            type: integer
-        - name: str2
-          description: String that will replace all numbers divisible by int2.
-          in: query
-          required: true
-          minlength: 1
-          schema:
-            type: string
-        - name: limit
-          description: Array size.
-          in: query
-          required: true
+          description: First divisor
           schema:
             type: integer
             minimum: 1
+          example: 3
+        - name: int2
+          in: query
+          required: true
+          description: Second divisor
+          schema:
+            type: integer
+            minimum: 1
+          example: 5
+        - name: limit
+          in: query
+          required: true
+          description: Upper bound of the sequence
+          schema:
+            type: integer
+            minimum: 1
+          example: 15
+        - name: str1
+          in: query
+          required: true
+          description: Replacement string for multiples of int1
+          schema:
+            type: string
+            minLength: 1
+          example: fizz
+        - name: str2
+          in: query
+          required: true
+          description: Replacement string for multiples of int2
+          schema:
+            type: string
+            minLength: 1
+          example: buzz
       responses:
         '200':
-          description: Success
+          description: Sequence generated successfully
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                $ref: '#/components/schemas/FizzBuzzResponse'
+              examples:
+                success:
+                  summary: Standard FizzBuzz example
+                  value:
+                    result:
+                      - "1"
+                      - "2"
+                      - "fizz"
+                      - "4"
+                      - "buzz"
+                      - "fizz"
+                      - "7"
+                      - "8"
+                      - "fizz"
+                      - "buzz"
+                      - "11"
+                      - "fizz"
+                      - "13"
+                      - "14"
+                      - "fizzbuzz"
         '400':
-          description: Invalid parameters
+          description: Invalid query parameters
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'      
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Unexpected internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /stats:
     get:
       tags:
         - stats
+      summary: Get the most frequent request
+      description: >
+        Returns the parameters of the most frequently requested FizzBuzz call
+        along with its hit count.
+      operationId: getMostFrequentRequest
       responses:
         '200':
-          description: Success
+          description: Statistics returned successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  int1:
-                    type: integer
-                  str1:
-                    type: string
-                  int2:
-                    type: integer
-                  str2:
-                    type: string
-                  limit:
-                    type: string
-                  hits:
-                    type: integer
+                $ref: '#/components/schemas/StatsResponse'
+        '404':
+          description: No statistics available yet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Unexpected internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   schemas:
-    Error:
+    FizzBuzzResponse:
       type: object
+      description: Generated FizzBuzz sequence
       properties:
-        code:
+        result:
+          type: array
+          items:
+            type: string
+          example:
+            - "1"
+            - "2"
+            - "fizz"
+            - "4"
+            - "buzz"
+      required:
+        - result
+
+    StatsResponse:
+      type: object
+      description: Most frequent FizzBuzz request statistics
+      properties:
+        int1:
           type: integer
-        message:
+          minimum: 1
+          example: 3
+        int2:
+          type: integer
+          minimum: 1
+          example: 5
+        limit:
+          type: integer
+          minimum: 1
+          example: 15
+        str1:
+          type: string
+          minLength: 1
+          example: fizz
+        str2:
+          type: string
+          minLength: 1
+          example: buzz
+        hits:
+          type: integer
+          minimum: 0
+          example: 42
+      required:
+        - int1
+        - int2
+        - limit
+        - str1
+        - str2
+        - hits
+
+    ErrorResponse:
+      type: object
+      description: Standard error response
+      properties:
+        error:
           type: string
       required:
-        - code
-        - message
+        - error

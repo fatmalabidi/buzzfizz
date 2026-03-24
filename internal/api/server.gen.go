@@ -14,12 +14,12 @@ import (
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-
+	// Generate a configurable FizzBuzz sequence
 	// (GET /sequences/fizzbuzz)
-	GetSequencesFizzbuzz(w http.ResponseWriter, r *http.Request, params GetSequencesFizzbuzzParams)
-
+	GenerateFizzBuzz(w http.ResponseWriter, r *http.Request, params GenerateFizzBuzzParams)
+	// Get the most frequent request
 	// (GET /stats)
-	GetStats(w http.ResponseWriter, r *http.Request)
+	GetMostFrequentRequest(w http.ResponseWriter, r *http.Request)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -31,13 +31,13 @@ type ServerInterfaceWrapper struct {
 
 type MiddlewareFunc func(http.Handler) http.Handler
 
-// GetSequencesFizzbuzz operation middleware
-func (siw *ServerInterfaceWrapper) GetSequencesFizzbuzz(w http.ResponseWriter, r *http.Request) {
+// GenerateFizzBuzz operation middleware
+func (siw *ServerInterfaceWrapper) GenerateFizzBuzz(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 
 	// Parameter object where we will unmarshal all parameters from the context
-	var params GetSequencesFizzbuzzParams
+	var params GenerateFizzBuzzParams
 
 	// ------------- Required query parameter "int1" -------------
 
@@ -51,21 +51,6 @@ func (siw *ServerInterfaceWrapper) GetSequencesFizzbuzz(w http.ResponseWriter, r
 	err = runtime.BindQueryParameterWithOptions("form", true, true, "int1", r.URL.Query(), &params.Int1, runtime.BindQueryParameterOptions{Type: "integer", Format: ""})
 	if err != nil {
 		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "int1", Err: err})
-		return
-	}
-
-	// ------------- Required query parameter "str1" -------------
-
-	if paramValue := r.URL.Query().Get("str1"); paramValue != "" {
-
-	} else {
-		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "str1"})
-		return
-	}
-
-	err = runtime.BindQueryParameterWithOptions("form", true, true, "str1", r.URL.Query(), &params.Str1, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "str1", Err: err})
 		return
 	}
 
@@ -84,21 +69,6 @@ func (siw *ServerInterfaceWrapper) GetSequencesFizzbuzz(w http.ResponseWriter, r
 		return
 	}
 
-	// ------------- Required query parameter "str2" -------------
-
-	if paramValue := r.URL.Query().Get("str2"); paramValue != "" {
-
-	} else {
-		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "str2"})
-		return
-	}
-
-	err = runtime.BindQueryParameterWithOptions("form", true, true, "str2", r.URL.Query(), &params.Str2, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "str2", Err: err})
-		return
-	}
-
 	// ------------- Required query parameter "limit" -------------
 
 	if paramValue := r.URL.Query().Get("limit"); paramValue != "" {
@@ -114,8 +84,38 @@ func (siw *ServerInterfaceWrapper) GetSequencesFizzbuzz(w http.ResponseWriter, r
 		return
 	}
 
+	// ------------- Required query parameter "str1" -------------
+
+	if paramValue := r.URL.Query().Get("str1"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "str1"})
+		return
+	}
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "str1", r.URL.Query(), &params.Str1, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "str1", Err: err})
+		return
+	}
+
+	// ------------- Required query parameter "str2" -------------
+
+	if paramValue := r.URL.Query().Get("str2"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "str2"})
+		return
+	}
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "str2", r.URL.Query(), &params.Str2, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "str2", Err: err})
+		return
+	}
+
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetSequencesFizzbuzz(w, r, params)
+		siw.Handler.GenerateFizzBuzz(w, r, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -125,11 +125,11 @@ func (siw *ServerInterfaceWrapper) GetSequencesFizzbuzz(w http.ResponseWriter, r
 	handler.ServeHTTP(w, r)
 }
 
-// GetStats operation middleware
-func (siw *ServerInterfaceWrapper) GetStats(w http.ResponseWriter, r *http.Request) {
+// GetMostFrequentRequest operation middleware
+func (siw *ServerInterfaceWrapper) GetMostFrequentRequest(w http.ResponseWriter, r *http.Request) {
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetStats(w, r)
+		siw.Handler.GetMostFrequentRequest(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -259,8 +259,8 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
-	m.HandleFunc("GET "+options.BaseURL+"/sequences/fizzbuzz", wrapper.GetSequencesFizzbuzz)
-	m.HandleFunc("GET "+options.BaseURL+"/stats", wrapper.GetStats)
+	m.HandleFunc("GET "+options.BaseURL+"/sequences/fizzbuzz", wrapper.GenerateFizzBuzz)
+	m.HandleFunc("GET "+options.BaseURL+"/stats", wrapper.GetMostFrequentRequest)
 
 	return m
 }

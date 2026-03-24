@@ -1,0 +1,25 @@
+run:
+  timeout: 3m
+  tests: false
+
+# Keep linting fast and focused; ignore generated code and non-Go assets.
+linters:
+  enable:
+    - govet
+    - errcheck
+    - staticcheck
+    - ineffassign
+    - typecheck
+    - unused
+
+issues:
+  exclude-use-default: false
+
+skip-dirs:
+  - bin
+  - vendor
+  - web
+  - api
+
+skip-files:
+  - ".*\\.gen\\.go"
