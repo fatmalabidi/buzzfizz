@@ -11,12 +11,13 @@ import (
 func (s *Server) GetSequencesFizzbuzz(w http.ResponseWriter, r *http.Request, params api.GetSequencesFizzbuzzParams) {
 	err := validateFizzbuzzParams(params)
 	if err != nil {
-		writeError(w, err.Error())
+		writeError(w, http.StatusBadRequest, err.Error())
 	}
 
 	result := s.fizzBuzzService.Generate(params.Int1, params.Int2, params.Limit, params.Str1, params.Str2)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(result)
+	s.statsService.Record(params.Int1, params.Int2, params.Limit, params.Str1, params.Str2)
 }
 
 func validateFizzbuzzParams(params api.GetSequencesFizzbuzzParams) error {

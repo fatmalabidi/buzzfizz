@@ -4,11 +4,11 @@ import (
 	"strconv"
 )
 
-type FizzBuzzService interface {
-	Generate(int1, int2, limit int, str1, str2 string) []string
-}
-
 type Service struct{}
+
+func NewService() *Service {
+	return &Service{}
+}
 
 func (s *Service) Generate(int1, int2, limit int, str1, str2 string) []string {
 	result := make([]string, 0, limit)
