@@ -14,5 +14,8 @@ func (s *Server) GetStats(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(stats)
+	if err := json.NewEncoder(w).Encode(stats); err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
 }
