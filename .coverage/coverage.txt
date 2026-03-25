@@ -1,0 +1,15 @@
+github.com/fatmalabidi/buzzfizz/internal/handlers/fizzbuzz_handler.go:12:	GenerateFizzBuzz	0.0%
+github.com/fatmalabidi/buzzfizz/internal/handlers/fizzbuzz_handler.go:29:	validateFizzbuzzParams	0.0%
+github.com/fatmalabidi/buzzfizz/internal/handlers/server.go:19:			NewServer		0.0%
+github.com/fatmalabidi/buzzfizz/internal/handlers/server.go:25:			writeError		0.0%
+github.com/fatmalabidi/buzzfizz/internal/handlers/stats_handler.go:11:		GetMostFrequentRequest	0.0%
+github.com/fatmalabidi/buzzfizz/internal/services/fizzbuzz/service.go:14:	NewService		0.0%
+github.com/fatmalabidi/buzzfizz/internal/services/fizzbuzz/service.go:18:	Generate		100.0%
+github.com/fatmalabidi/buzzfizz/internal/services/stats/service.go:13:		NewService		0.0%
+github.com/fatmalabidi/buzzfizz/internal/services/stats/service.go:19:		Record			0.0%
+github.com/fatmalabidi/buzzfizz/internal/services/stats/service.go:23:		GetMostFrequent		0.0%
+github.com/fatmalabidi/buzzfizz/internal/services/stats/store.go:20:		NewStore		100.0%
+github.com/fatmalabidi/buzzfizz/internal/services/stats/store.go:26:		GetMostFrequent		100.0%
+github.com/fatmalabidi/buzzfizz/internal/services/stats/store.go:46:		BuildKey		100.0%
+github.com/fatmalabidi/buzzfizz/internal/services/stats/store.go:50:		Increment		100.0%
+total:										(statements)		46.2%

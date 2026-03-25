@@ -4,13 +4,18 @@ import (
 	"strconv"
 )
 
-type Service struct{}
-
-func NewService() *Service {
-	return &Service{}
+//go:generate mockgen -destination=mocks/mock_service.go -package=mocks github.com/fatmalabidi/buzzfizz/internal/fizzbuzz Service
+type Service interface {
+	Generate(int1, int2, limit int, str1, str2 string) []string
 }
 
-func (s *Service) Generate(int1, int2, limit int, str1, str2 string) []string {
+type service struct{}
+
+func NewService() Service {
+	return &service{}
+}
+
+func (s service) Generate(int1, int2, limit int, str1, str2 string) []string {
 	result := make([]string, 0, limit)
 	for i := 1; i <= limit; i++ {
 		if i%(int1*int2) == 0 {

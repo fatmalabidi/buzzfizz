@@ -5,21 +5,21 @@ import (
 	"net/http"
 
 	"github.com/fatmalabidi/buzzfizz/internal/api"
-	"github.com/fatmalabidi/buzzfizz/internal/fizzbuzz"
-	"github.com/fatmalabidi/buzzfizz/internal/stats"
+	"github.com/fatmalabidi/buzzfizz/internal/services/fizzbuzz"
+	"github.com/fatmalabidi/buzzfizz/internal/services/stats"
 )
 
 var _ api.ServerInterface = new(Server)
 
 type Server struct {
-	fizzBuzzService *fizzbuzz.Service
-	statsService    *stats.Service
+	fizzBuzzService fizzbuzz.Service
+	statsService    stats.Service
 }
 
 func NewServer(fizzBuzzService fizzbuzz.Service, statsService stats.Service) *Server {
 	return &Server{
-		fizzBuzzService: &fizzBuzzService,
-		statsService:    &statsService,
+		fizzBuzzService: fizzBuzzService,
+		statsService:    statsService,
 	}
 }
 func writeError(w http.ResponseWriter, code int, message string) {

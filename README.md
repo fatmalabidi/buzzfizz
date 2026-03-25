@@ -1,4 +1,7 @@
-# Buzzfizz (Fizzbuzz API)
+# BuzzFizz
+
+![CI/CD](https://github.com/fatmalabidi/buzzfizz/actions/workflows/cicd.yml/badge.svg)
+![Coverage](./coverage.svg)
 
 A small configurable FizzBuzz HTTP API documented by an OpenAPI 3.0 spec.
  
@@ -21,7 +24,7 @@ oapi-codegen --version
 
 Install golangci-lint:
 ```bash
-go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+go install github.com/golangci-lint/golangci-lint/cmd/golangci-lint@latest
 ```
   
 **Code Generation**
@@ -32,7 +35,14 @@ make generate
 
 DO NOT edit generated files!
 
+
+**Lint**
+```bash
+make lint
+```
+
 **Tests**  
+
 Run unit tests:
 ```bash
 make test
@@ -43,18 +53,22 @@ Test with race
 make test-race
 ```
 
-**Lint**
+Test with coverage and generate coverage badge
 ```bash
-make lint
+make test-cov
 ```
 
-**Docker**
+To see the coverage report
+```bash
+make cover-html
+```
+
+**Run**
+To run the application on docker
 ```bash
 make docker-run
 ```
-
-**Cleanup**
+To run the application locally
 ```bash
-make clean
+make run
 ```
-
