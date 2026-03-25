@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/fatmalabidi/buzzfizz/internal/stats"
+	"github.com/fatmalabidi/buzzfizz/internal/services/stats"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,7 +17,6 @@ func TestStoreIncrement(t *testing.T) {
 		str1  string
 		str2  string
 	}{
-		name:  "increment",
 		int1:  3,
 		int2:  5,
 		limit: 20,

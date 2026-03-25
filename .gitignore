@@ -4,3 +4,4 @@ coverage.html
 .vscode/
 *.gen.go
 bin
+./coverage

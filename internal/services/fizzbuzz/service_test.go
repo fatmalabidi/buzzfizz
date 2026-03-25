@@ -1,8 +1,9 @@
 package fizzbuzz
 
 import (
-	"slices"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGenerate(t *testing.T) {
@@ -34,7 +35,7 @@ func TestGenerate(t *testing.T) {
 			want:  []string{},
 		},
 		{
-			name:  "params greater than limit",
+			name:  "dividors greater than limit",
 			int1:  50,
 			int2:  10,
 			limit: 5,
@@ -46,11 +47,9 @@ func TestGenerate(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &Service{}
+			s := &service{}
 			got := s.Generate(tt.int1, tt.int2, tt.limit, tt.str1, tt.str2)
-			if !slices.Equal(got, tt.want) {
-				t.Errorf("Generate() = %v, want %v", got, tt.want)
-			}
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }

@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/fatmalabidi/buzzfizz/internal/api"
-	"github.com/fatmalabidi/buzzfizz/internal/fizzbuzz"
 	"github.com/fatmalabidi/buzzfizz/internal/handlers"
-	"github.com/fatmalabidi/buzzfizz/internal/stats"
+	"github.com/fatmalabidi/buzzfizz/internal/services/fizzbuzz"
+	"github.com/fatmalabidi/buzzfizz/internal/services/stats"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 	if fizzBuzzService == nil || statsService == nil {
 		log.Fatal("services must not be nil")
 	}
-	server := handlers.NewServer(*fizzBuzzService, *statsService)
+	server := handlers.NewServer(fizzBuzzService, statsService)
 
 	mux := http.NewServeMux()
 

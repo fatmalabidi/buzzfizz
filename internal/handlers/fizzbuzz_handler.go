@@ -16,14 +16,14 @@ func (s *Server) GenerateFizzBuzz(w http.ResponseWriter, r *http.Request, params
 		return
 	}
 
-	result := s.fizzBuzzService.Generate(params.Int1, params.Int2, params.Limit, params.Str1, params.Str2)
+	result := s.FizzBuzzService.Generate(params.Int1, params.Int2, params.Limit, params.Str1, params.Str2)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(result); err != nil {
 		writeError(w, http.StatusInternalServerError, "error encoding response")
 		return
 	}
-	s.statsService.Record(params.Int1, params.Int2, params.Limit, params.Str1, params.Str2)
+	s.StatsService.Record(params.Int1, params.Int2, params.Limit, params.Str1, params.Str2)
 }
 
 func validateFizzbuzzParams(params api.GenerateFizzBuzzParams) error {
